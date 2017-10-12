@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bugsMenu</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/menu-footer-bar.css">
+</head>
+<body>
+    <div class="navBar">
+        <div id="burger">
+            <div id="burger-container">
+                <div class="burger-strip"></div>
+                <div class="burger-strip"></div>
+                <div class="burger-strip"></div>
+            </div>
+        </div>
+        <!--<div class="subsection">
+            <div class="outerCircle">
+                <div class="circle"></div>
+            </div>
+        </div>
+        <div class="subsection">
+            <div class="outerCircle min">
+                <div class="circle"></div>
+            </div>
+        </div>-->
+    </div>
+    <div class="content">
+        <div class="scroll">
+            <div class="screen">1</div>
+            <div class="screen">2-1</div>
+            <div class="screen">2-2</div>
+            <div class="screen">2-3</div>
+            <div class="screen">2-4</div>
+            <div class="screen">2-5</div>
+            <div class="screen">2-6</div>
+            <div class="screen">2-7</div>
+            <div class="screen">3-1</div>
+            <div class="screen">3-2</div>
+            <div class="screen">3-3</div>
+            <div class="screen">3-4</div>
+            <div class="screen">3-5</div>
+            <div class="screen">3-6</div>
+            <div class="screen">3-7</div>
+            <div class="screen">3-8</div>
+            <div class="screen">4-1</div>
+            <div class="screen">4-2</div>
+            <div class="screen">4-3</div>
+            <div class="screen">4-4</div>
+            <div class="screen">4-5</div>
+            <div class="screen">4-6</div>
+            <div class="screen">4-7</div>
+            <div class="screen">5</div>
+        </div>
+    </div>
+    <div class="scrollbar">
+        <div class="outer">
+            <div class="inner"></div>
+        </div>
+    </div>
+    <div class="footer">footer</div>
+
+    <script src="js/mTween.js"></script>
+    <script>
+        (function () {   // 整屏设置
+            let content = document.querySelector(".content");
+            let screens = document.querySelectorAll(".screen");
+            screens.forEach( (item) => {
+                item.style.height = content.offsetHeight + "px";
+            })
+            document.body.onresize = function () {
+                screens.forEach( (item) => {
+                    item.style.height = content.offsetHeight + "px";
+                })
+            }
+        })();
+
+        (function () {  // 滚动事件
+            let scroll = document.querySelector(".scroll");
+            let outer = document.querySelector(".outer");
+            let inner = document.querySelector(".inner");
+            let screens = document.querySelectorAll(".screen");
+
+
+            let screenH = screens[0].offsetHeight;
+            let scrollMax = screenH*(screens.length-1);
+            let maxTop = 0;
+
+
+            let t = 0;
+            let moveState = false;
+
+            inner.style.height = outer.offsetHeight/screens.length + "px";
+            maxTop = outer.offsetHeight - inner.offsetHeight;
+
+            inner.onmousedown = function (e) {
+                let disY = e.clientY - inner.getBoundingClientRect().top;
+                document.onmousemove = function (e) {
+                    let T = e.clientY - disY;
+                    if(T<0)T=0;
+                    if(T>maxTop)T=maxTop;
+                    inner.style.top = T + "px";
+                    scroll.style.top = -scrollMax*(inner.offsetTop/maxTop) + "px";
+                }
+                document.onmouseup = function () {
+                    if(t<inner.offsetTop/inner.offsetHeight){
+                        t = Math.ceil(inner.offsetTop/inner.offsetHeight)
+                        /*if(t === screens.length){
+                            console.log('aaa');
+                            t= maxTop/inner.offsetHeight;
+                        }*/
+                    }else{
+                        t = Math.floor(inner.offsetTop/inner.offsetHeight)
+                    }
+
+                    /*t = Math.round(inner.offsetTop/inner.offsetHeight);
+                    console.log(t);*/
+                    move();
+                    document.onmousemove = document.onmouseup = null;
+                }
+                return false;
+            }
+
+
+
+            addScroll(scroll,upFn,downFn)
+            function upFn(){
+                if(moveState)return;
+                t--;
+                if(t<0){
+                    t=0;
+                    return
+                }
+                move()
+            }
+            function downFn () {
+                if(moveState)return;
+                t++;
+                if(t === screens.length){
+                    t=t-1;
+                    return;
+                }
+                move()
+            }
+            function addScroll(obj,upFn,downFn){
+                obj.onmousewheel = fn;
+                obj.addEventListener("DOMMouseScroll",fn);
+                function fn(e){
+                    if( e.wheelDelta ){//chrome
+                        if( e.wheelDelta > 0 ){//上
+                            upFn();
+                        }else{//下
+                            downFn();
+                        }
+                    }else if( e.detail ){//firefox
+                        if( e.detail < 0 ){//上
+                            upFn();
+                        }else{//下
+                            downFn();
+                        }
+                    }
+                }
+            }
+            function move() {
+                mTween({
+                    el: inner,
+                    time: 60,
+                    target: {
+                        top: inner.offsetHeight*t
+                    },
+                    type: 'easeBothStrong',
+                    callIn: function () {
+                        moveState = true
+                    },
+                    callBack: function () {
+                        moveState = false
+                        console.log(inner.offsetTop);
+                        console.log(maxTop);
+                    }
+                })
+                mTween({
+                    el: scroll,
+                    time: 60,
+                    target: {
+                        top: -screenH*t
+                    },
+                    type: 'easeBothStrong'
+                })
+            }
+        })();
+
+        (function () {  //burger
+            let burger = document.querySelector("#burger");
+            burger.onmouseover = function () {
+                burger.classList.add("hover")
+            }
+            burger.onmouseout = function () {
+                burger.classList.remove("hover")
+            }
+            burger.onclick = function () {
+                burger.classList.toggle("close")
+            }
+        })();
+    </script>
+</body>
+</html>
