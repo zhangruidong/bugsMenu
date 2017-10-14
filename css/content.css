@@ -1,0 +1,67 @@
+.screen:first-of-type {
+    border:none;
+}
+.screen .bg {
+    background: url("../assets/home/landing/landingBG.jpg") center/cover no-repeat;
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: calc(100% + 30px);
+    height: calc(100% + 30px);
+}
+.landing-container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.landing-container .landing-logo {
+    background: url("../assets/home/landing/landingLogo.png") center top/contain no-repeat;
+    width: 62.39%;
+    height: 62%;
+    position: relative;
+    top: -20px;
+    left: calc( (100% - 62.39%) / 2 )
+}
+/*
+<a href="">
+                            <div class="iTunesLogo"></div>
+                        </a>
+                        <a href="">
+                            <div class="documentaryChannel"></div>
+                        </a>
+*/
+.landing-container .landing-logo .iTunesLogo {
+    background: url("../assets/home/landing/itunes.png") center/cover no-repeat;
+    height: 40px;
+    width: 110px;
+}
+.landing-container .landing-logo .documentaryChannel {
+    background: url("../assets/home/landing/documentaryLogo.png") center/cover no-repeat;
+    width: 72px;
+    height: 25px;
+    margin-left: 10px;
+}
+
+.landing-container .landing-text {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+}
+.landing-container .landing-scroll {
+    position: relative;
+    top: 10px;
+    width: 100%;
+    height: 20px;
+    text-align: center;
+}
+.landing-container .landing-scroll .scrollBtn {
+    background: url("../assets/menu/arrow.png") no-repeat;
+    width: 50px;
+    height: 14px;
+    margin: auto;
+    transform: rotateZ(90deg) translateX(15px);
+}

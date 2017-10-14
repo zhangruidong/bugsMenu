@@ -244,5 +244,6 @@
     box-sizing: border-box;
     border:20px solid green;
     border-bottom-color: orangered;
+    position: relative;
 }
 

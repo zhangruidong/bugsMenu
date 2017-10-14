@@ -155,9 +155,10 @@
 			},
 			type: 'easeBothStrong',
 			callIn: function () {
-				moveState = true
+				moveState = true;
 			},
 			callBack: function () {
+				console.log(t);
 				moveState = false
 				tapCircle(t)
 			}
